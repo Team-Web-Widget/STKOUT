@@ -108,7 +108,7 @@ const Home = ({ session }) => {
                 console.log(data.avatar_url)
             }
         } catch (error) {
-            alert(error.message)
+            console.log(error.message)
         } finally {
             setLoading(false)
         }
@@ -122,6 +122,7 @@ const Home = ({ session }) => {
         if (navigator.share) {
             navigator.share({
                 title: username + ' | STKOUT Profile',
+                text: 'Check out web.dev.',
                 url: window.location.href + '?p=' + localShare,
             }).then(() => {
                 console.log('Thanks for sharing!');

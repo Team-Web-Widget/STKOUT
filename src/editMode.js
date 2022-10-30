@@ -92,7 +92,7 @@ const EditMode = ({ session }) => {
     const updateTracker = async (e) => {
      
      
-
+if(shareID == null || shareID == undefined || shareID == ''){
         try {
             setLoading(true)
             const { user } = session
@@ -112,14 +112,14 @@ const EditMode = ({ session }) => {
                 throw error
             }
         } catch (error) {
-            alert(error.message)
+                console.log(error.message)
         } finally {
             setLoading(false)
             
         }
 
        console.log('uptrack complete')
-
+    }
     }
 
 
@@ -147,6 +147,7 @@ const EditMode = ({ session }) => {
                 setBio(data.bio)
                 setTagline(data.tagline)
                 setCity(data.city)
+                setShareID(data.shareID)
                 console.log(data.avatar_url)
             }
         } catch (error) {
@@ -187,12 +188,12 @@ const EditMode = ({ session }) => {
             alert(error.message)
         } finally {
             setLoading(false)
-            setactivationStatus("true")
-            updateTracker()
+           
             
         }
 
-     
+        setactivationStatus("true")
+        updateTracker()
         localStorage.removeItem('codeStatus')
         localStorage.removeItem('code')
         localStorage.setItem('changesSaved', true)
@@ -245,7 +246,7 @@ const EditMode = ({ session }) => {
 
                     <div className='max-aligner'>
                     
-                        <h1 className='page-title'>{qrCodeStatus === 'hideModeGlobal' ? 'Profile Setup' : 'Edit Profile'}</h1>
+                        <h1 className='page-title'>{qrCodeStatus === 'hideModeGlobal' ? 'Setup QR Code' : 'Edit Profile'}</h1>
 
                    
                        

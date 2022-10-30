@@ -100,10 +100,12 @@ const EditMode = ({ session, accessCodeProp }) => {
                 console.log('code status: ', data.accessid)
                 console.log('card state: ', data.activationStatus)
                 if(data.activationStatus == 'false'){
+                    closeModal();
                     console.log('code is inactive')
                     localStorage.setItem('codeStatus', 'active');
                     localStorage.setItem('code', accessCodeProp);
-                    navigate('/auth')
+                    navigate('/')
+                  
                 }
             }
         } catch (error) {
@@ -177,7 +179,7 @@ const EditMode = ({ session, accessCodeProp }) => {
         
 
 
-            <div className="editPfile vivify fadeIn delay-300">
+            <div id='editPFILE' className="editPfile vivify fadeIn delay-300">
 
 
                 <div className='navbar-strip '>
