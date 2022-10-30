@@ -1,0 +1,13 @@
+.card-text>h3 > input {
+    font-size: 25px;
+    font-weight: 600;
+    text-align: left;
+  color: white;
+  }
+
+  .card-text>p>input {
+    font-size: 12px;
+    font-weight: 400;
+    text-align: left;
+    color: white;
+  }
