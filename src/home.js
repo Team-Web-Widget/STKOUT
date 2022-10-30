@@ -35,6 +35,12 @@ const Home = ({ session }) => {
         }
     }
 
+    useEffect(() => {
+        if(localStorage.getItem('codeStatus') == "active"){
+            navigate('/editMode')
+        }
+    }, [])
+
 
     useEffect(() => {
         if (avatar_url) downloadImage(avatar_url);
@@ -134,7 +140,8 @@ const Home = ({ session }) => {
         <>
     <div className='vivify fadeIn delay-400'>
             <div className='logo-container'>
-                <i className='material-icons'>nfc</i>
+                <i className='material-icons'>qr_code_scanner
+</i>
                 <img src={logotext} alt="logo" />
             </div>
 

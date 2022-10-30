@@ -32,6 +32,9 @@ const EditMode = ({ session }) => {
     const [city, setCity] = useState("");
     const [autocompleteCities, setAutocompleteCities] = useState([]);
     const [autocompleteErr, setAutocompleteErr] = useState("");
+    const [qrCodeStatus, setQrCodeStatus] = useState(false);
+    const [shareID , setShareID] = useState(null);
+    const [activationStatus, setactivationStatus] = useState(null)
 
     const handleCityChange = async (e) => {
         setCity(e.target.value);
@@ -83,6 +86,39 @@ const EditMode = ({ session }) => {
             }
         }, 500);
 
+
+    }
+
+    const updateTracker = async (e) => {
+     
+     
+
+        try {
+            setLoading(true)
+            const { user } = session
+
+            const updates = {
+             
+                activationStatus,
+                updated_at: new Date(),
+            }
+
+            let { error } = await supabase
+            .from('codetrack')
+            .update(updates)
+            .eq('accessid', shareID)
+
+            if (error) {
+                throw error
+            }
+        } catch (error) {
+            alert(error.message)
+        } finally {
+            setLoading(false)
+            
+        }
+
+       console.log('uptrack complete')
 
     }
 
@@ -138,6 +174,7 @@ const EditMode = ({ session }) => {
                 themeColor,
                 tagline,
                 city,
+                shareID,
                 updated_at: new Date(),
             }
 
@@ -150,8 +187,14 @@ const EditMode = ({ session }) => {
             alert(error.message)
         } finally {
             setLoading(false)
+            setactivationStatus("true")
+            updateTracker()
+            
         }
 
+     
+        localStorage.removeItem('codeStatus')
+        localStorage.removeItem('code')
         localStorage.setItem('changesSaved', true)
         navigate('/', { replace: true })
 
@@ -164,6 +207,17 @@ const EditMode = ({ session }) => {
     const updateCity = async (e) => {
 
     }
+
+    
+  useEffect(() => {
+    if (localStorage.getItem('codeStatus') === 'active') {
+        setQrCodeStatus("hideModeGlobal")
+        setShareID(localStorage.getItem('code'))
+      console.log('codeStatus is true')
+    }else{
+      console.log('codeStatus is false')
+    }
+  }, [])
 
 
     function handleThemeColorChange(e) {
@@ -190,8 +244,11 @@ const EditMode = ({ session }) => {
                 <div className='maximized-card '>
 
                     <div className='max-aligner'>
+                    
+                        <h1 className='page-title'>{qrCodeStatus === 'hideModeGlobal' ? 'Profile Setup' : 'Edit Profile'}</h1>
 
-                        <h1 className='page-title'>Edit Profile</h1>
+                   
+                       
                         <form onSubmit={updateProfile} className="form-widget">
 
                             <div>
@@ -252,16 +309,7 @@ const EditMode = ({ session }) => {
 
 
 
-                            <div>
-                                <label htmlFor="website">Website</label>
-                                <br></br>
-                                <input
-                                    id="website"
-                                    type="url"
-                                    value={website || ''}
-                                    onChange={(e) => setWebsite(e.target.value)}
-                                />
-                            </div>
+                        
                             <div>
                                 <label htmlFor="shareMail">Email</label>
                                 <br></br>

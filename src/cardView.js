@@ -25,6 +25,8 @@ const EditMode = ({ session, accessCodeProp }) => {
     const [tagline, setTagline] = useState(null)
     const [themeColor, setThemeColor] = useState(null)
     const [city, setCity] = useState(null)
+    const [activestatus , setActivestatus] = useState(null)
+    const [cardstate, setCardstate] = useState(null)
     const navigate = useNavigate()
 
     const downloadImage = async (path) => {
@@ -60,7 +62,7 @@ const EditMode = ({ session, accessCodeProp }) => {
     useEffect(() => {
 
         getProfile();
-
+        getCodeStatus();
 
     }, [session])
 
@@ -75,6 +77,46 @@ const EditMode = ({ session, accessCodeProp }) => {
 
     }
 
+    
+    const getCodeStatus = async () => {
+        try {
+            setLoading(true)
+         console.log('checking code status')
+
+            let { data, error, status } = await supabase
+                .from('codetrack')
+                .select(`accessid, activationStatus`)
+                .eq('accessid', accessCodeProp)
+                .single()
+
+            if (error && status !== 406) {
+                throw error
+            }
+
+            if (data) {
+              setActivestatus(data.activestatus)
+                setCardstate(data.cardstate)
+                console.log('code status: ', data)
+                console.log('code status: ', data.accessid)
+                console.log('card state: ', data.activationStatus)
+                if(data.activationStatus == 'false'){
+                    console.log('code is inactive')
+                    localStorage.setItem('codeStatus', 'active');
+                    localStorage.setItem('code', accessCodeProp);
+                    navigate('/auth')
+                }
+            }
+        } catch (error) {
+            console.log(error.message);
+            console.log('Your code is invalid or has expired. Please try again.')
+       
+        } finally {
+            setLoading(false)
+        }
+    }
+
+
+    
 
     const getProfile = async () => {
         try {
@@ -88,7 +130,9 @@ const EditMode = ({ session, accessCodeProp }) => {
                 .single()
 
             if (error && status !== 406) {
-                throw error
+               
+                throw error;
+                
             }
 
             if (data) {
@@ -103,13 +147,19 @@ const EditMode = ({ session, accessCodeProp }) => {
                 setCity(data.city)
                 console.log(data.avatar_url)
                 console.log(data.themeColor)
+              
             }
         } catch (error) {
             console.log(error.message)
+      
         } finally {
             setLoading(false)
         }
     }
+
+
+
+
 
 
 

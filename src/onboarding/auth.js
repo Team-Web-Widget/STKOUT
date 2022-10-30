@@ -3,12 +3,23 @@ import { supabase } from '../supabaseClient'
 import logo from "../assets/shroutlogo 2.png"
 import linkedinBtn from '../assets/signinbtn.png'
 import outline from '../assets/pattern.svg'
+import qrCodeReady from '../assets/qrcodeready.svg'
 
 
 
 export default function Auth() {
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState('')
+  const [qrCodeStatus, setQrCodeStatus] = useState(null)
+
+  useEffect(() => {
+    if (localStorage.getItem('codeStatus') === 'active') {
+      setQrCodeStatus("hideModeGlobal")
+      console.log('codeStatus is true')
+    }else{
+      console.log('codeStatus is false')
+    }
+  }, [])
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -38,13 +49,13 @@ export default function Auth() {
 */
   return (
 
-    
-  <>
 
-    <div className="auth-container">
-      <div className="auth-wrap form-widget" aria-live="polite">
-  
-    {/*     {loading ? (
+    <>
+
+      <div className="auth-container" id={qrCodeStatus}>
+        <div className="auth-wrap form-widget"  aria-live="polite">
+
+          {/*     {loading ? (
           'Sending magic link...'
         ) : (
           <form onSubmit={handleLogin} className="auth-form-magic">
@@ -62,15 +73,37 @@ export default function Auth() {
             </button>
           </form>
         )} */}
-        <div className="auth-logo-container">
-        <img className='vivify fadeIn duration-300 delay-200' src={logo} alt="Shrout Logo" />
-        </div>
-  
+          <div className={qrCodeStatus === 'hideModeGlobal' ? 'nonVisibleElement' : 'logoVisible'}>
+            <div className="auth-logo-container">
+              <img className='vivify fadeIn duration-300 delay-200' src={logo} alt="Shrout Logo" />
 
-        <button className='auth-btn-prov vivify fadeIn duration-300 delay-400' onClick={signInWithLinkedIn}><img src={linkedinBtn} alt="Sign in with Linkedin" /></button>
-  
+            </div>
+          </div>
+
+<div className={qrCodeStatus === 'hideModeGlobal' ? 'qrvisible' : 'nonVisibleElement'}>
+<img className='qrCodeStateReady vivify fadeInTop delay-600 duration-300' src={qrCodeReady} alt="qrcode status" />
+
+</div>
+
+<div className='bottom-auth'>
+<label id="profileBTN" className={qrCodeStatus === 'hideModeGlobal' ? 'snap-tab, snap-flow-below' : 'nonVisibleElement'}>
+                                   
+                                    <div className="snap-btn">
+                                        <i className='material-icons'>qr_code</i>
+                                        <div className='snap-text'>
+                                           
+                                            <h3>Sign In To Setup Your QR Code</h3>
+                                            <p>Sign in below to begin setting up your qr code profile.</p>
+                                        </div>
+                                    </div>
+                                </label>      
+
+          <button className='auth-btn-prov vivify fadeIn duration-300 delay-400' onClick={signInWithLinkedIn}><img src={linkedinBtn} alt="Sign in with Linkedin" /></button>
+
+</div>
+
+        </div>
       </div>
-    </div>
     </>
   )
 }

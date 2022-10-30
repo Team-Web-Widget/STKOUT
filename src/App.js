@@ -89,6 +89,8 @@ export default function App() {
      
           <Route path="/editMode" element={<EditMode session={session} />} />
 
+          <Route path="/auth" element={<Auth/>} />
+
           <Route path="/changeMode" element={<ChangeMode session={session} />} />
 
         </Routes>

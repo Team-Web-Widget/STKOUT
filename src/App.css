@@ -17,6 +17,8 @@ body {
 
 }
 
+.hideModeGlobal {display: none}
+
 .accessCodePrev {
   position: fixed;
   top: 0px;
@@ -158,8 +160,7 @@ body{
   background-color: transparent;
   border: none;
 
-  width: 90%;
-  height: 13%;
+  width: 100%;
  
 }
 
@@ -886,8 +887,20 @@ border-radius: 50px;
 
 
 
+#hideModeGlobal > div {justify-content: space-between;}
 
+.logoVisible {    height: 83%;}
 
+.qrCodeStateReady {    margin-top: 3vh;
+  height: 128%;
+  object-fit: scale-down;;}
+
+.bottom-auth {display: flex;
+  flex-direction: column;
+  padding: 22px;
+  box-sizing: border-box;}
+
+.snap-flow-below {margin-bottom: 15px;}
 
 
 
@@ -1015,7 +1028,7 @@ border-radius: 50px;
 /* Safari Only CSS */
 
 @supports selector(:nth-child(1 of x)) {
-  .auth-btn-prov {
+  .bottom-auth {
     margin-bottom: 100px;
   }
 
