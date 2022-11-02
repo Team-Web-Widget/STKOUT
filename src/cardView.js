@@ -61,7 +61,7 @@ const EditMode = ({ session, accessCodeProp }) => {
 
     useEffect(() => {
 
-        getProfile();
+      
         getCodeStatus();
 
     }, [session])
@@ -80,6 +80,7 @@ const EditMode = ({ session, accessCodeProp }) => {
     
     const getCodeStatus = async () => {
         try {
+     
             setLoading(true)
          console.log('checking code status')
 
@@ -106,6 +107,8 @@ const EditMode = ({ session, accessCodeProp }) => {
                     localStorage.setItem('code', accessCodeProp);
                     navigate('/')
                   
+                }else{
+                    getProfile();
                 }
             }
         } catch (error) {
@@ -114,6 +117,7 @@ const EditMode = ({ session, accessCodeProp }) => {
        
         } finally {
             setLoading(false)
+  
         }
     }
 
@@ -155,7 +159,10 @@ const EditMode = ({ session, accessCodeProp }) => {
             console.log(error.message)
       
         } finally {
+          
             setLoading(false)
+            document.getElementById('progress-indicate').style.display = 'none';
+            document.getElementById('max-card').style.display = 'block';
         }
     }
 
@@ -180,7 +187,7 @@ const EditMode = ({ session, accessCodeProp }) => {
 
 
             <div id='editPFILE' className="editPfile vivify fadeIn delay-300">
-
+       
 
                 <div className='navbar-strip '>
                     <button onClick={closeModal} className='nav-icon' ><i className='material-icons'>arrow_back</i><span>Back</span></button>
@@ -188,7 +195,11 @@ const EditMode = ({ session, accessCodeProp }) => {
                     <button className='nav-t-right' ></button>
                 </div>
 
-                <div className='maximized-card '>
+                <div id='progress-indicate' class="progress-bar">
+    <div class="progress-bar-value"></div>
+  </div>
+
+                <div id='max-card' className='maximized-card '>
 
                     <div className='max-aligner'>
 

@@ -34,7 +34,8 @@ const EditMode = ({ session }) => {
     const [autocompleteErr, setAutocompleteErr] = useState("");
     const [qrCodeStatus, setQrCodeStatus] = useState(false);
     const [shareID , setShareID] = useState(null);
-    const [activationStatus, setactivationStatus] = useState(null)
+    const [activationStatus, setactivationStatus] = useState(null);
+
 
     const handleCityChange = async (e) => {
         setCity(e.target.value);
@@ -90,9 +91,8 @@ const EditMode = ({ session }) => {
     }
 
     const updateTracker = async (e) => {
-     
-     
-if(shareID == null || shareID == undefined || shareID == ''){
+  
+if(localStorage.getItem('codeStatus') === 'active'){
         try {
             setLoading(true)
             const { user } = session
@@ -147,8 +147,13 @@ if(shareID == null || shareID == undefined || shareID == ''){
                 setBio(data.bio)
                 setTagline(data.tagline)
                 setCity(data.city)
+                if(localStorage.getItem('codeStatus') != 'active'){
                 setShareID(data.shareID)
-                console.log(data.avatar_url)
+                } else{
+                    console.log('no code active')
+                }
+                console.log(data.avatar_url);
+                console.log(data.shareID);
             }
         } catch (error) {
             console.log(error.message)
@@ -172,10 +177,10 @@ if(shareID == null || shareID == undefined || shareID == ''){
                 shareMail,
                 phoneNum,
                 bio,
+                shareID,
                 themeColor,
                 tagline,
                 city,
-                shareID,
                 updated_at: new Date(),
             }
 
@@ -188,16 +193,16 @@ if(shareID == null || shareID == undefined || shareID == ''){
             alert(error.message)
         } finally {
             setLoading(false)
-           
+            setactivationStatus("true")
+            updateTracker()
+            localStorage.removeItem('codeStatus')
+            localStorage.removeItem('code')
+            localStorage.setItem('changesSaved', true)
+            navigate('/', { replace: true })
             
         }
 
-        setactivationStatus("true")
-        updateTracker()
-        localStorage.removeItem('codeStatus')
-        localStorage.removeItem('code')
-        localStorage.setItem('changesSaved', true)
-        navigate('/', { replace: true })
+      
 
     }
 
@@ -214,7 +219,7 @@ if(shareID == null || shareID == undefined || shareID == ''){
     if (localStorage.getItem('codeStatus') === 'active') {
         setQrCodeStatus("hideModeGlobal")
         setShareID(localStorage.getItem('code'))
-      console.log('codeStatus is true')
+      console.log('codeStatus is true' + localStorage.getItem('code'))
     }else{
       console.log('codeStatus is false')
     }
