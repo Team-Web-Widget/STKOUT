@@ -140,24 +140,44 @@ const Home = ({ session }) => {
     return (
         <>
     <div className='vivify fadeIn delay-400'>
-            <div className='logo-container'>
+
+        <nav className='home-nav'>
+        <div className='logo-container'>
                 <i className='material-icons'>qr_code_scanner
 </i>
                 <img src={logotext} alt="logo" />
             </div>
 
-            <div className='profile-shell vivify fadeIn '>
-                <div className='profile-container'>
-                    <img className='vivify fadeIn duration-300' src={strictAvatar}></img>
+            <img className='vivify fadeIn duration-300' src={strictAvatar}></img>
+        </nav>
+            
+ 
+            <div className="grouped-btns vivify fadeIn duration-300 delay-100 slim-mode">
 
-                    <div className='profile-info vivify fadeIn duration-300 '>
-                        <h3>Welcome Back,</h3>
-                        <h1>{username}</h1>
-                    </div>
-                </div>
 
+
+                <button onClick={viewProfile} className="btn btn-primary"><i className='material-icons'>account_circle</i><span>View Profile</span></button>
+
+                <div className='slim-bar'></div>
+
+                <button onClick={shareProfile} className="btn btn-primary" ><i className='material-icons'>ios_share</i><span>Share Profile</span></button>
             </div>
 
+
+
+
+
+
+            <div className='discover-feed'>
+
+                <div className='discover-card vivify fadeIn duration-300 delay-100'>
+                    <img></img>
+                    </div>
+
+            </div>
+          
+
+          
 
 
 
@@ -172,17 +192,7 @@ const Home = ({ session }) => {
 
             </div>
 
-            <label className='btn-label vivify fadeIn duration-300 delay-100'>Your Profile</label>
-            <div className="grouped-btns vivify fadeIn duration-300 delay-100 slim-mode">
-
-
-
-                <button onClick={viewProfile} className="btn btn-primary"><i className='material-icons'>account_circle</i><span>View Profile</span></button>
-
-                <div className='slim-bar'></div>
-
-                <button onClick={shareProfile} className="btn btn-primary" ><i className='material-icons'>ios_share</i><span>Share Profile</span></button>
-            </div>
+          
 
 
             <div className='vivify blink delay-1000'>
