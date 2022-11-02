@@ -147,6 +147,7 @@ if(localStorage.getItem('codeStatus') === 'active'){
                 setBio(data.bio)
                 setTagline(data.tagline)
                 setCity(data.city)
+                setThemeColor(data.themeColor)
                 if(localStorage.getItem('codeStatus') != 'active'){
                 setShareID(data.shareID)
                 } else{
@@ -159,6 +160,8 @@ if(localStorage.getItem('codeStatus') === 'active'){
             console.log(error.message)
         } finally {
             setLoading(false)
+            document.getElementById('editModalY').style.display = 'block';
+            document.getElementById('progress-indicate').style.display = 'none';
         }
     }
 
@@ -192,6 +195,7 @@ if(localStorage.getItem('codeStatus') === 'active'){
         } catch (error) {
             alert(error.message)
         } finally {
+            
             setLoading(false)
             setactivationStatus("true")
             updateTracker()
@@ -199,6 +203,7 @@ if(localStorage.getItem('codeStatus') === 'active'){
             localStorage.removeItem('code')
             localStorage.setItem('changesSaved', true)
             navigate('/', { replace: true })
+            localStorage.setItem('themeColor', themeColor)
             
         }
 
@@ -245,11 +250,14 @@ if(localStorage.getItem('codeStatus') === 'active'){
                     <button className='nav-t-right' ></button>
                 </div>
 
+                <div id='progress-indicate' class="progress-bar">
+    <div class="progress-bar-value"></div>
+  </div>
 
 
-                <div className='maximized-card '>
+                <div className='maximized-card ' id='editModalY'>
 
-                    <div className='max-aligner'>
+                    <div className='max-aligner vivify fadeIn delay-300 duration-300'>
                     
                         <h1 className='page-title'>{qrCodeStatus === 'hideModeGlobal' ? 'Setup QR Code' : 'Edit Profile'}</h1>
 

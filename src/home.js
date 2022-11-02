@@ -5,6 +5,7 @@ import logo from "./assets/logoicon.svg"
 import logotext from "./assets/logotxt.svg"
 import previewImg from './assets/preview.png'
 import Avatar from './avatar'
+import promImage from './assets/meeting.jpg'
 import { Link, useNavigate } from 'react-router-dom'
 
 import EditMode from './editMode'
@@ -18,6 +19,7 @@ const Home = ({ session }) => {
     const [strictAvatar, setStrictAvatar] = useState(null)
     const [statusUpdate, setStatusUpdate] = useState(null)
     const [localShare, setLocalShare] = useState(null)
+    const [parsedsavedcontacts, setParsedsavedcontacts] = useState(null)
     const navigate = useNavigate()
 
     const downloadImage = async (path) => {
@@ -36,7 +38,7 @@ const Home = ({ session }) => {
     }
 
     useEffect(() => {
-        if(localStorage.getItem('codeStatus') == "active"){
+        if (localStorage.getItem('codeStatus') == "active") {
             navigate('/editMode')
         }
     }, [])
@@ -49,7 +51,7 @@ const Home = ({ session }) => {
             localStorage.setItem('changesSaved', 'false')
             setStatusUpdate('Changes Saved');
             document.getElementById('saveStateIcon').style.display = 'block';
-        }else{
+        } else {
             document.getElementById('saveStateIcon').style.display = 'none';
         }
     }, [avatar_url])
@@ -90,8 +92,8 @@ const Home = ({ session }) => {
 
             let { data, error, status } = await supabase
                 .from('profiles')
-                .select(`username, website, avatar_url, shareID, themeColor`)
-                .eq('id', user.id)
+                .select(`username, website, avatar_url, shareID, themeColor,savedcontacts`)
+                .eq('id', user.id )
                 .single()
 
             if (error && status !== 406) {
@@ -103,8 +105,10 @@ const Home = ({ session }) => {
                 setWebsite(data.website)
                 setAvatarUrl(data.avatar_url)
                 setLocalShare(data.shareID)
-
+                setParsedsavedcontacts(data.savedcontacts)
+                localStorage.setItem('themeColor', data.themeColor)
                 document.documentElement.style.setProperty('--main-color', data.themeColor);
+                console.log(data.savedcontacts)
                 console.log(data.avatar_url)
             }
         } catch (error) {
@@ -139,68 +143,88 @@ const Home = ({ session }) => {
 
     return (
         <>
-    <div className='vivify fadeIn delay-400'>
+            <div className='vivify fadeIn delay-400'>
 
-        <nav className='home-nav'>
-        <div className='logo-container'>
-                <i className='material-icons'>qr_code_scanner
-</i>
-                <img src={logotext} alt="logo" />
-            </div>
+                <nav className='home-nav'>
+                    <div className='logo-container'>
+                        <i className='material-icons'>qr_code_scanner
+                        </i>
+                        <img src={logotext} alt="logo" />
+                    </div>
 
-            <img className='vivify fadeIn duration-300' src={strictAvatar}></img>
-        </nav>
-            
- 
-            <div className="grouped-btns vivify fadeIn duration-300 delay-100 slim-mode">
+                    <img onClick={editProfile} className='vivify fadeIn duration-300' src={strictAvatar}></img>
+                </nav>
 
 
-
-                <button onClick={viewProfile} className="btn btn-primary"><i className='material-icons'>account_circle</i><span>View Profile</span></button>
-
-                <div className='slim-bar'></div>
-
-                <button onClick={shareProfile} className="btn btn-primary" ><i className='material-icons'>ios_share</i><span>Share Profile</span></button>
-            </div>
+                <div className="grouped-btns vivify fadeIn duration-300 delay-100 slim-mode">
 
 
+
+                    <button onClick={viewProfile} className="btn btn-primary"><i className='material-icons'>account_circle</i><span>View Profile</span></button>
+
+                    <div className='slim-bar'></div>
+
+                    <button onClick={shareProfile} className="btn btn-primary" ><i className='material-icons'>ios_share</i><span>Share Profile</span></button>
+                </div>
 
 
 
 
+
+                {/* 
             <div className='discover-feed'>
 
                 <div className='discover-card vivify fadeIn duration-300 delay-100'>
-                    <img></img>
+                    <img src={promImage}></img>
+                    <div className='discover-txt'>
+                        <h3>Discover</h3>
+                        <p>Make Your Next Meeting a Slam Dunk</p>
+                    </div>
                     </div>
 
-            </div>
-          
+                    <div className='discover-card vivify fadeIn duration-300 delay-100'>
+                    <img src={promImage}></img>
+                    <div className='discover-txt'>
+                        <h3>Discover</h3>
+                        <p>Make Your Next Meeting a Slam Dunk</p>
+                    </div>
+                    </div>
 
-          
-
-
-
-            <label className='btn-label vivify fadeIn duration-300 delay-100'>Customize</label>
-            <div className="grouped-btns vivify fadeIn duration-300 delay-100">
-
-
-
-                <button onClick={editProfile} className="btn btn-primary" ><i className='material-icons'>edit</i><span>Edit Profile</span></button>
-
-                <button onClick={changeMode} className="btn btn-subtext"><i className='material-icons'>swap_horizontal_circle</i><span>Change Mode <p>Current: Profile Mode</p></span></button>
-
-            </div>
-
-          
+                    <div className='discover-card vivify fadeIn duration-300 delay-100'>
+                    <img src={promImage}></img>
+                    <div className='discover-txt'>
+                        <h3>Discover</h3>
+                        <p>Make Your Next Meeting a Slam Dunk</p>
+                    </div>
+                    </div>
+            </div> */}
 
 
-            <div className='vivify blink delay-1000'>
-                <p className='statusUpdate vivify fadeOut delay-5000'><i className='material-icons' id='saveStateIcon'>save</i>{statusUpdate}</p>
-            </div>
 
 
-            <button className='signoutBTN' onClick={signout}>SignOut</button>
+
+
+                <label className='btn-label vivify fadeIn duration-300 delay-100'>Customize</label>
+                <div className="grouped-btns vivify fadeIn duration-300 delay-100">
+
+
+
+                    <button onClick={editProfile} className="btn btn-primary" ><i className='material-icons'>edit</i><span>Edit Profile</span></button>
+
+                    <button onClick={changeMode} className="btn btn-subtext"><i className='material-icons'>swap_horizontal_circle</i><span>Change Mode <p>Current: Profile Mode</p></span></button>
+
+                </div>
+
+
+                {parsedsavedcontacts}
+
+
+                <div className='vivify blink delay-1000'>
+                    <p className='statusUpdate vivify fadeOut delay-5000'><i className='material-icons' id='saveStateIcon'>save</i>{statusUpdate}</p>
+                </div>
+
+
+                <button className='signoutBTN' onClick={signout}>SignOut</button>
             </div>
         </>
 

@@ -58,6 +58,8 @@ const [tempMode, setTempMode] = useState(null)
             console.log(error.message)
         } finally {
             setLoading(false)
+            document.getElementById('chngemde-container').style.display = "block"
+            document.getElementById('progress-indicate').style.display = "none"
         }
     }
 
@@ -121,7 +123,7 @@ const [tempMode, setTempMode] = useState(null)
 
     return (
         <>
-            <div className="editPfile vivify fadeInBottom duration-200 ">
+            <div  className="editPfile vivify fadeInBottom duration-200 ">
 
 
                 <div className='navbar-strip '>
@@ -129,12 +131,15 @@ const [tempMode, setTempMode] = useState(null)
                     <h3></h3>
                     <button className='nav-t-right' ></button>
                 </div>
+                <div id='progress-indicate' class="progress-bar">
+    <div class="progress-bar-value"></div>
+  </div>
 
 
 
-                <div className='maximized-card '>
+                <div className='maximized-card ' id='chngemde-container'>
 
-                    <div className='max-aligner'>
+                    <div className='max-aligner vivify fadeIn delay-100 duration-300'>
 
                         <h1 className='page-title'>Change Mode</h1>
                     

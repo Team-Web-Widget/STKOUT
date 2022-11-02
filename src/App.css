@@ -278,7 +278,7 @@ body{
 
 .btn-label {    font-weight: 600;
   margin: 19px;
-  margin-top: 33px;
+  margin-top: 14px;
   margin-bottom: 19px;
   padding-top: 4px;
   position: static;
@@ -333,6 +333,42 @@ padding: 13px;
 .inlineMode {display:none;position: absolute;}
 
 .editMDinput {border: none; background-color: transparent;}
+
+
+
+
+
+
+
+
+
+.discover-feed {    padding-left: 20px;padding-top: 20px;display: flex;overflow-x: scroll;white-space: nowrap;gap: 20px;box-sizing: border-box;scroll-snap-type: x mandatory;
+}
+
+.discover-txt {   padding: 21px;
+  width: 76vw;
+  white-space: pre-wrap;
+  box-sizing: border-box;
+  margin-top: -110px;
+  position: relative;}
+
+.discover-txt > h3 {font-size: 14px;font-weight: 600;color: white;}
+
+.discover-txt > p {font-size: 19px;font-weight: 600;color: white;}
+
+.discover-card > img {width: 100%; height: 200px;object-fit: cover;filter: brightness(0.7);border-radius: 12px;}
+
+.discover-card:last-of-type {margin-right: 20px;}
+
+.discover-card {
+  width: 90%;scroll-snap-align: start;  scroll-snap-align: center;
+ 
+}
+
+
+
+
+
 
 
 
@@ -782,6 +818,7 @@ border-radius: 50px;
 
 .statusUpdate {width: 100%; text-align: center; color:var(--main-color);font-size: 16px;font-weight: 600;display: flex;justify-content: center; gap: 7px; align-items: center;margin-top: 50px;position: fixed; bottom: 50px;}
 
+#editModalY {display: none;}
 
 
 
@@ -794,8 +831,7 @@ border-radius: 50px;
 
 
 
-
-
+#chngemde-container {display: none;}
 
 .snap-btn {
   display: flex;
@@ -844,13 +880,17 @@ border-radius: 50px;
 }
 
 .signoutBTN {
-  margin-top: 35px;
-  width: 100%;
+  margin-top: 17px;
+  width: 26%;
   font-weight: 600;
   font-size: 16px;
   color: var(--main-color);
-  background-color: transparent;
+  background-color: var(--light-main-color);
   border: none;
+  /* border: solid; */
+  padding: 7px;
+  border-radius: 7px;
+  margin-left: 20px;
 }
 
 

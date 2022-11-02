@@ -44,8 +44,8 @@ export default function App() {
 
   return (
     <>
-      <p className='accessCodePrev'>Access Code: {accessCode}</p>
-
+      {/* <p className='accessCodePrev'>Access Code: {accessCode}</p>
+ */}
       {/* {!accessCode ? (
 
         !session ? (

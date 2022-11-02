@@ -28,7 +28,8 @@ const EditMode = ({ session, accessCodeProp }) => {
     const [activestatus , setActivestatus] = useState(null)
     const [cardstate, setCardstate] = useState(null)
     const navigate = useNavigate()
-
+    const savedcontacts = ["777777", "018999"];
+  
     const downloadImage = async (path) => {
         try {
             const { data, error } = await supabase.storage
@@ -46,7 +47,7 @@ const EditMode = ({ session, accessCodeProp }) => {
 
     useEffect(() => {
 
-        document.documentElement.style.setProperty('--main-color', themeColor);
+        document.documentElement.style.setProperty('--main-color', localStorage.getItem('themeColor'));
     }, [themeColor])
 
 
@@ -169,7 +170,38 @@ const EditMode = ({ session, accessCodeProp }) => {
 
 
 
+    const handleSaveContact = async () => {
+        console.log('saved contact')
+        savedcontacts.push(accessCodeProp)
+       
 
+        
+        try {
+            setLoading(true)
+            const { user } = session
+
+            const updates = {
+                id: user.id,
+                savedcontacts,
+                updated_at: new Date(),
+            }
+
+            let { error } = await supabase.from('profiles').upsert(updates)
+
+            if (error) {
+                throw error
+            }
+        } catch (error) {
+            console.log(error.message)
+        } finally {
+            setLoading(false)
+        }
+
+        localStorage.setItem('changesSaved', true)
+   
+
+
+    }
 
 
     const closeModal = () => {
@@ -219,7 +251,7 @@ const EditMode = ({ session, accessCodeProp }) => {
                         </div>
 
                         <div className='prom-btn vivify fadeIn delay-500'>
-                            <button>Save Contact</button>
+                            <button onClick={handleSaveContact}>Save Contact</button>
                         </div>
 
 
