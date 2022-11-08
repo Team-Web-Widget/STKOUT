@@ -20,6 +20,7 @@ const Home = ({ session }) => {
     const [statusUpdate, setStatusUpdate] = useState(null)
     const [localShare, setLocalShare] = useState(null)
     const [parsedsavedcontacts, setParsedsavedcontacts] = useState(null)
+    const [savedcontacts, setSavedcontacts] = useState([])
     const navigate = useNavigate()
 
     const downloadImage = async (path) => {
@@ -92,7 +93,7 @@ const Home = ({ session }) => {
 
             let { data, error, status } = await supabase
                 .from('profiles')
-                .select(`username, website, avatar_url, shareID, themeColor,savedcontacts`)
+                .select(`username, website, avatar_url, shareID, themeColor, savedcontacts`)
                 .eq('id', user.id )
                 .single()
 
@@ -105,11 +106,12 @@ const Home = ({ session }) => {
                 setWebsite(data.website)
                 setAvatarUrl(data.avatar_url)
                 setLocalShare(data.shareID)
-                setParsedsavedcontacts(data.savedcontacts)
+                setSavedcontacts(data.savedcontacts)
                 localStorage.setItem('themeColor', data.themeColor)
                 document.documentElement.style.setProperty('--main-color', data.themeColor);
                 console.log(data.savedcontacts)
                 console.log(data.avatar_url)
+                console.log(data.savedcontacts)
             }
         } catch (error) {
             console.log(error.message)
@@ -171,7 +173,7 @@ const Home = ({ session }) => {
 
 
 
-                {/* 
+             
             <div className='discover-feed'>
 
                 <div className='discover-card vivify fadeIn duration-300 delay-100'>
@@ -197,7 +199,7 @@ const Home = ({ session }) => {
                         <p>Make Your Next Meeting a Slam Dunk</p>
                     </div>
                     </div>
-            </div> */}
+            </div> 
 
 
 
@@ -216,7 +218,22 @@ const Home = ({ session }) => {
                 </div>
 
 
-                {parsedsavedcontacts}
+{savedcontacts && savedcontacts.map((contact) => (
+                    <div className='contact-feed'>
+                        <button className='contact-item'>
+                            <img src='https://shotkit.com/wp-content/uploads/2021/06/cool-profile-pic-matheus-ferrero.jpeg'></img>
+                            <h3>Avery Gram</h3>
+                            </button>
+                            </div>
+                            ))}
+
+           
+     
+
+
+
+
+
 
 
                 <div className='vivify blink delay-1000'>

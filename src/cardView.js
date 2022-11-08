@@ -28,8 +28,12 @@ const EditMode = ({ session, accessCodeProp }) => {
     const [activestatus , setActivestatus] = useState(null)
     const [cardstate, setCardstate] = useState(null)
     const navigate = useNavigate()
+    const [tempContacts, setTempContacts] = useState([])
     const savedcontacts = ["777777", "018999"];
   
+
+
+
     const downloadImage = async (path) => {
         try {
             const { data, error } = await supabase.storage
@@ -107,7 +111,6 @@ const EditMode = ({ session, accessCodeProp }) => {
                     localStorage.setItem('codeStatus', 'active');
                     localStorage.setItem('code', accessCodeProp);
                     navigate('/')
-                  
                 }else{
                     getProfile();
                 }
@@ -132,7 +135,7 @@ const EditMode = ({ session, accessCodeProp }) => {
 
             let { data, error, status } = await supabase
                 .from('profiles')
-                .select(`username, website, avatar_url, shareMail, phoneNum, bio, themeColor, tagline, city`)
+                .select(`username, website, avatar_url, shareMail, phoneNum, bio, themeColor, tagline, city, savedcontacts`)
                 .eq('shareID', accessCodeProp)
                 .single()
 
@@ -151,6 +154,7 @@ const EditMode = ({ session, accessCodeProp }) => {
                 setBio(data.bio)
                 setThemeColor(data.themeColor)
                 setTagline(data.tagline)
+                setTempContacts(data.savedcontacts)
                 setCity(data.city)
                 console.log(data.avatar_url)
                 console.log(data.themeColor)
@@ -172,8 +176,10 @@ const EditMode = ({ session, accessCodeProp }) => {
 
     const handleSaveContact = async () => {
         console.log('saved contact')
-        savedcontacts.push(accessCodeProp)
-       
+        const temparr = [...tempContacts, {name: username, number: accessCode}];
+        setTempContacts (temparr);
+      
+        
 
         
         try {
@@ -182,7 +188,7 @@ const EditMode = ({ session, accessCodeProp }) => {
 
             const updates = {
                 id: user.id,
-                savedcontacts,
+                "savedcontacts":temparr,
                 updated_at: new Date(),
             }
 
@@ -252,6 +258,8 @@ const EditMode = ({ session, accessCodeProp }) => {
 
                         <div className='prom-btn vivify fadeIn delay-500'>
                             <button onClick={handleSaveContact}>Save Contact</button>
+                            
+
                         </div>
 
 

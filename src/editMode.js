@@ -163,6 +163,10 @@ if(localStorage.getItem('codeStatus') === 'active'){
             document.getElementById('editModalY').style.display = 'block';
             document.getElementById('progress-indicate').style.display = 'none';
         }
+
+
+
+   
     }
 
     const updateProfile = async (e) => {

@@ -162,11 +162,11 @@ const [tempMode, setTempMode] = useState(null)
                                 <label id="linkBTN" className="snap-tab">
                                     <input value={'linkMode'} onChange={(e) => setMode(e.target.value)} checked={mode === 'linkMode' ? 'checked' : ''} type={'radio'}  name="radio"></input>
                                     <div className="snap-btn">
-                                        <i className='material-icons'>link</i>
+                                        <i className='material-icons'>business</i>
                                         <div className='snap-text'>
                                          
-                                            <h3>Link Mode</h3>
-                                            <p>When your sticker is scanned it takes you to a custom link you choose. </p>
+                                            <h3>Busines Mode</h3>
+                                            <p>This mode allows you to manage multiple employees stickers profiles.</p>
                                         </div>
                                     </div>
                                 </label>
