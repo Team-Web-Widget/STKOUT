@@ -176,7 +176,7 @@ const EditMode = ({ session, accessCodeProp }) => {
 
     const handleSaveContact = async () => {
         console.log('saved contact')
-        const temparr = [...tempContacts, {name: username, number: accessCode}];
+        const temparr = [...tempContacts, {name: username, number: accessCode, avatar: avatar_url}];
         setTempContacts (temparr);
       
         
@@ -201,9 +201,10 @@ const EditMode = ({ session, accessCodeProp }) => {
             console.log(error.message)
         } finally {
             setLoading(false)
+            localStorage.setItem('changesSaved', true)
         }
 
-        localStorage.setItem('changesSaved', true)
+       
    
 
 

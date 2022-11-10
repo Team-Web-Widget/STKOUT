@@ -10,6 +10,8 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import EditMode from './editMode'
 
+
+
 const Home = ({ session }) => {
     const [loading, setLoading] = useState(true)
     const [username, setUsername] = useState(null)
@@ -21,9 +23,11 @@ const Home = ({ session }) => {
     const [localShare, setLocalShare] = useState(null)
     const [parsedsavedcontacts, setParsedsavedcontacts] = useState(null)
     const [savedcontacts, setSavedcontacts] = useState([])
+    const [tempSavedAvatars, setTempSavedAvatars] = useState([])
     const navigate = useNavigate()
 
     const downloadImage = async (path) => {
+
         try {
             const { data, error } = await supabase.storage
                 .from('avatars')
@@ -33,10 +37,34 @@ const Home = ({ session }) => {
             }
             const url = URL.createObjectURL(data)
             setStrictAvatar(url)
+            console.log(data)
         } catch (error) {
             console.log('Error downloading image: ', error.message)
         }
     }
+
+    const downloadContactImage = async (path, index) => {
+        console.log(path)
+        try {
+            const { data, error } = await supabase.storage
+                .from('avatars')
+                .download(path)
+            if (error) {
+                throw error
+
+            }
+
+            const url = URL.createObjectURL(data)
+            console.log('url', url)
+            console.log('index', index)
+            localStorage.setItem('tempSavedAvatars' + index, url)
+
+        } catch (error) {
+            console.log('Error downloading image: ', error.message)
+        }
+    }
+
+
 
     useEffect(() => {
         if (localStorage.getItem('codeStatus') == "active") {
@@ -94,7 +122,7 @@ const Home = ({ session }) => {
             let { data, error, status } = await supabase
                 .from('profiles')
                 .select(`username, website, avatar_url, shareID, themeColor, savedcontacts`)
-                .eq('id', user.id )
+                .eq('id', user.id)
                 .single()
 
             if (error && status !== 406) {
@@ -124,11 +152,15 @@ const Home = ({ session }) => {
         window.location.href = '/?p=' + localShare
     }
 
+    const viewContactProfile = async (user) => {
+        window.location.href = '/?p=' + user
+    }
+
     const shareProfile = async () => {
         if (navigator.share) {
             navigator.share({
                 title: username + ' | STKOUT Profile',
-                text: 'Check out web.dev.',
+                text: 'Check out' + username + ' on STKOUT!',
                 url: window.location.href + '?p=' + localShare,
             }).then(() => {
                 console.log('Thanks for sharing!');
@@ -171,35 +203,32 @@ const Home = ({ session }) => {
 
 
 
+                <div className='discover-feed'>
 
-
-             
-            <div className='discover-feed'>
-
-                <div className='discover-card vivify fadeIn duration-300 delay-100'>
-                    <img src={promImage}></img>
-                    <div className='discover-txt'>
-                        <h3>Discover</h3>
-                        <p>Make Your Next Meeting a Slam Dunk</p>
-                    </div>
+                    <div className='discover-card vivify fadeIn duration-300 delay-100'>
+                        <img src={promImage}></img>
+                        <div className='discover-txt'>
+                            <h3>Discover</h3>
+                            <p>Make Your Next Meeting a Slam Dunk</p>
+                        </div>
                     </div>
 
                     <div className='discover-card vivify fadeIn duration-300 delay-100'>
-                    <img src={promImage}></img>
-                    <div className='discover-txt'>
-                        <h3>Discover</h3>
-                        <p>Make Your Next Meeting a Slam Dunk</p>
-                    </div>
+                        <img src={promImage}></img>
+                        <div className='discover-txt'>
+                            <h3>Discover</h3>
+                            <p>Make Your Next Meeting a Slam Dunk</p>
+                        </div>
                     </div>
 
                     <div className='discover-card vivify fadeIn duration-300 delay-100'>
-                    <img src={promImage}></img>
-                    <div className='discover-txt'>
-                        <h3>Discover</h3>
-                        <p>Make Your Next Meeting a Slam Dunk</p>
+                        <img src={promImage}></img>
+                        <div className='discover-txt'>
+                            <h3>Discover</h3>
+                            <p>Make Your Next Meeting a Slam Dunk</p>
+                        </div>
                     </div>
-                    </div>
-            </div> 
+                </div>
 
 
 
@@ -216,19 +245,51 @@ const Home = ({ session }) => {
                     <button onClick={changeMode} className="btn btn-subtext"><i className='material-icons'>swap_horizontal_circle</i><span>Change Mode <p>Current: Profile Mode</p></span></button>
 
                 </div>
+                <label style={{ marginTop: '4px' }} class="btn-label vivify fadeIn duration-300 delay-100">Your Contacts</label>
+                <div className='contact-feed'>
 
 
-{savedcontacts && savedcontacts.map((contact) => (
-                    <div className='contact-feed'>
-                        <button className='contact-item'>
-                            <img src='https://shotkit.com/wp-content/uploads/2021/06/cool-profile-pic-matheus-ferrero.jpeg'></img>
-                            <h3>Avery Gram</h3>
-                            </button>
+
+                    {savedcontacts && savedcontacts.map((contact) => (
+
+
+
+                        <button onClick={() => {viewContactProfile(contact.number)}} className='contact-item'>
+                            <img style={{display: 'none'}} id={contact.avatar + "loader"} src='https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif' onLoad={
+                                () => {
+                                    downloadContactImage(contact.avatar, contact.number)
+                              
+                                }}></img>
+                            <img src={localStorage.getItem('tempSavedAvatars' + contact.number)} ></img>
+                            <h3>
+                                {contact.name}
+                                {contact.count}
+                            </h3>
+                        </button>
+
+                    ))
+
+                    }
+
+                    {
+                        savedcontacts.length == 0 && (
+                            <div style={{ marginTop: '0px', width: '100%' }}
+
+                                className="snap-btn">
+                                <i className='material-icons'>person_off
+                                </i>
+                                <div className='snap-text'>
+
+                                    <h3 style={{ fontSize: '14px', fontWeight: '600' }}>No Contacts Saved Yet</h3>
+                                    <p>View someones profile or scan a QR Code powered by STKOUT to save a profile.</p>
+                                </div>
                             </div>
-                            ))}
+                        )
+                    }
 
-           
-     
+
+                </div>
+
 
 
 
