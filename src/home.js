@@ -255,11 +255,13 @@ const Home = ({ session }) => {
 
 
                         <button onClick={() => {viewContactProfile(contact.number)}} className='contact-item'>
+                            
                             <img style={{display: 'none'}} id={contact.avatar + "loader"} src='https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif' onLoad={
                                 () => {
                                     downloadContactImage(contact.avatar, contact.number)
                               
                                 }}></img>
+
                             <img src={localStorage.getItem('tempSavedAvatars' + contact.number)} ></img>
                             <h3>
                                 {contact.name}
