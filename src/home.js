@@ -24,6 +24,7 @@ const Home = ({ session }) => {
     const [parsedsavedcontacts, setParsedsavedcontacts] = useState(null)
     const [savedcontacts, setSavedcontacts] = useState([])
     const [tempSavedAvatars, setTempSavedAvatars] = useState([])
+    const [contactLoad,setContactLoad] = useState(true)
     const navigate = useNavigate()
 
     const downloadImage = async (path) => {
@@ -44,24 +45,31 @@ const Home = ({ session }) => {
     }
 
     const downloadContactImage = async (path, index) => {
-        console.log(path)
-        try {
-            const { data, error } = await supabase.storage
-                .from('avatars')
-                .download(path)
-            if (error) {
-                throw error
 
+        new Promise(async (resolve, reject) => {
+            try {
+                const { data, error } = await supabase.storage
+                    .from('avatars')
+                    .download(path)
+                if (error) {
+                    throw error
+    
+                }
+                console.log("121212")
+                const url = URL.createObjectURL(data)
+                console.log('url', url)
+                console.log('index', index)
+                setTempSavedAvatars(state => [...state, url])
+                console.log("compoted")
+
+                resolve("Completed")
+
+            } catch (error) {
+                console.log('Error downloading image: ', error.message)
+                reject(error.message)
             }
-
-            const url = URL.createObjectURL(data)
-            console.log('url', url)
-            console.log('index', index)
-            localStorage.setItem('tempSavedAvatars' + index, url)
-
-        } catch (error) {
-            console.log('Error downloading image: ', error.message)
-        }
+        });
+        
     }
 
 
@@ -175,6 +183,21 @@ const Home = ({ session }) => {
         const { error } = await supabase.auth.signOut()
     }
 
+
+    useEffect(() => {
+        (async () => {
+            if(savedcontacts.length != 0 && contactLoad == true){
+                await savedcontacts.map( async(contact)  => {
+                    await downloadContactImage(contact.avatar, contact.number)
+                })
+                
+                setContactLoad(false)
+            }
+        })()
+     
+    }, [savedcontacts])
+
+
     return (
         <>
             <div className='vivify fadeIn delay-400'>
@@ -250,27 +273,21 @@ const Home = ({ session }) => {
 
 
 
-                    {savedcontacts && savedcontacts.map((contact) => (
+                    {
+                        (contactLoad == false)? 
+                        savedcontacts.map((contact, index) => (
+                            <button onClick={() => {viewContactProfile(contact.number)}} className='contact-item'>
+                            <img src={tempSavedAvatars[index]} ></img>
+                                <h3>
+                                    {contact.name}
+                                    {contact.count}
+                                </h3>
+                            </button>
+                        ))
+                          
 
-
-
-                        <button onClick={() => {viewContactProfile(contact.number)}} className='contact-item'>
-                            
-                            <img style={{display: 'none'}} id={contact.avatar + "loader"} src='https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif' onLoad={
-                                () => {
-                                    downloadContactImage(contact.avatar, contact.number)
-                              
-                                }}></img>
-
-                            <img src={localStorage.getItem('tempSavedAvatars' + contact.number)} ></img>
-                            <h3>
-                                {contact.name}
-                                {contact.count}
-                            </h3>
-                        </button>
-
-                    ))
-
+                      :
+                      ""
                     }
 
                     {
