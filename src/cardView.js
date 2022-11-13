@@ -30,9 +30,9 @@ const EditMode = ({ session, accessCodeProp }) => {
     const navigate = useNavigate()
     const [tempContacts, setTempContacts] = useState([])
     const savedcontacts = ["777777", "018999"];
-  
-
-
+    const [following, setFollowing] = useState()
+    const [pulledContacts, setPulledContacts] = useState([])
+    const [saveLoading, setSaveLoading] = useState(false)
 
     const downloadImage = async (path) => {
         try {
@@ -95,6 +95,8 @@ const EditMode = ({ session, accessCodeProp }) => {
                 .eq('accessid', accessCodeProp)
                 .single()
 
+                
+
             if (error && status !== 406) {
                 throw error
             }
@@ -112,6 +114,7 @@ const EditMode = ({ session, accessCodeProp }) => {
                     localStorage.setItem('code', accessCodeProp);
                     navigate('/')
                 }else{
+                    getSavedContacts();
                     getProfile();
                 }
             }
@@ -126,12 +129,68 @@ const EditMode = ({ session, accessCodeProp }) => {
     }
 
 
+
+
+
+
+    const getSavedContacts = async () => {
+        try {
+     
+            setLoading(true)
+         console.log('checking code status')
+         const { user } = session
+
+            let { data, error, status } = await supabase
+                .from('profiles')
+                .select(`savedcontacts`)
+                .eq('id', user.id)
+                .single()
+
+            if (error && status !== 406) {
+                throw error
+            }
+
+            if (data) {
+           
+            
+             
+                data.savedcontacts.map (contact => {
+                    if(contact.number.includes(accessCodeProp)){
+                        document.getElementById('saveCNT').style.transform = 'scale(0.5)';
+                        setTimeout(() => {
+                            setFollowing('following')
+                        }, 200);
+                      
+                        console.log(contact.number)
+                    
+                    }else{
+                        setFollowing('notfollowing')
+                    }
+                })
+            }
+        } catch (error) {
+            console.log(error.message);
+            console.log('Your code is invalid or has expired. Please try again.')
+       
+        } finally {
+            setLoading(false)
+           
+  
+        }
+    }
+
+
+
+
+
+
+
     
 
     const getProfile = async () => {
         try {
             setLoading(true)
-         
+          
 
             let { data, error, status } = await supabase
                 .from('profiles')
@@ -156,9 +215,12 @@ const EditMode = ({ session, accessCodeProp }) => {
                 setTagline(data.tagline)
                 setTempContacts(data.savedcontacts)
                 setCity(data.city)
-                console.log(data.avatar_url)
-                console.log(data.themeColor)
-              
+                console.log(accessCodeProp + 'theprop')
+          
+                console.log(data.savedcontacts)
+             
+          
+               
             }
         } catch (error) {
             console.log(error.message)
@@ -175,12 +237,14 @@ const EditMode = ({ session, accessCodeProp }) => {
 
 
     const handleSaveContact = async () => {
+        document.getElementById('contactTXT').style.display = 'none';
+        document.getElementById('progress-indicate2').style.display = 'block';
         console.log('saved contact')
         const temparr = [...tempContacts, {name: username, number: accessCode, avatar: avatar_url}];
         setTempContacts (temparr);
       
         
-
+  setSaveLoading(true)
         
         try {
             setLoading(true)
@@ -201,13 +265,9 @@ const EditMode = ({ session, accessCodeProp }) => {
             console.log(error.message)
         } finally {
             setLoading(false)
+            getSavedContacts();
             localStorage.setItem('changesSaved', true)
         }
-
-       
-   
-
-
     }
 
 
@@ -258,9 +318,12 @@ const EditMode = ({ session, accessCodeProp }) => {
                         </div>
 
                         <div className='prom-btn vivify fadeIn delay-500'>
-                            <button onClick={handleSaveContact}>Save Contact</button>
-                            
-
+                
+                          <div>
+                            {following == 'following' ? <div className='following-btn'><button className='vivify popIn'>Following</button></div> : <button id='saveCNT' onClick={handleSaveContact}><div id='progress-indicate2' class="progress-bar" style={{width: '50%', margin: 'auto', borderRadius: '40px', backgroundColor: '#3b65ff9e', marginTop: '8px', marginBottom: '8px', display: 'none'}}>
+    <div style={{backgroundColor: 'white'}} class="progress-bar-value"></div>
+  </div><span id='contactTXT'>Save Contact</span></button>}
+                          </div>
                         </div>
 
 
