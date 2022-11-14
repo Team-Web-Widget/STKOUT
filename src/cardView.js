@@ -320,7 +320,7 @@ const EditMode = ({ session, accessCodeProp }) => {
                         <div className='prom-btn vivify fadeIn delay-500'>
                 
                           <div>
-                            {following == 'following' ? <div className='following-btn'><button className='vivify popIn'>Following</button></div> : <button id='saveCNT' onClick={handleSaveContact}><div id='progress-indicate2' class="progress-bar" style={{width: '50%', margin: 'auto', borderRadius: '40px', backgroundColor: '#3b65ff9e', marginTop: '8px', marginBottom: '8px', display: 'none'}}>
+                            {following == 'following' ? <div className='following-btn'><button className='vivify popIn'>Following</button></div> : <button id='saveCNT' onClick={handleSaveContact}><div id='progress-indicate2' class="progress-bar" style={{width: '50%', margin: 'auto', borderRadius: '40px', backgroundColor: 'var(--main-color)', marginTop: '8px', marginBottom: '8px', display: 'none'}}>
     <div style={{backgroundColor: 'white'}} class="progress-bar-value"></div>
   </div><span id='contactTXT'>Save Contact</span></button>}
                           </div>
